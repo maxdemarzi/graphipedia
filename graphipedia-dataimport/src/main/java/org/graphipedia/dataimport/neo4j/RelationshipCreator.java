@@ -64,7 +64,7 @@ public class RelationshipCreator extends SimpleStaxParser {
     private void createRelationship(long nodeId, String link) {
         Long linkNodeId = findNodeId(link);
         if (linkNodeId != null) {
-            inserter.createRelationship(nodeId, linkNodeId, WikiRelationship.Link, null);
+            inserter.createRelationship(nodeId, linkNodeId, WikiRelationship.LINK, null);
             linkCounter.increment();
         } else {
             badLinkCount++;
