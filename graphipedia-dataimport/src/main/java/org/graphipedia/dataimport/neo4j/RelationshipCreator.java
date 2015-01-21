@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.graphipedia.dataimport.ProgressCounter;
 import org.graphipedia.dataimport.SimpleStaxParser;
+import org.neo4j.helpers.collection.MapUtil;
 import org.neo4j.unsafe.batchinsert.BatchInserter;
 
 public class RelationshipCreator extends SimpleStaxParser {
@@ -67,8 +68,16 @@ public class RelationshipCreator extends SimpleStaxParser {
             inserter.createRelationship(nodeId, linkNodeId, WikiRelationship.LINK, null);
             linkCounter.increment();
         } else {
+            createNode(link);
+            createRelationship(nodeId, link);
             badLinkCount++;
         }
+    }
+
+    private void createNode(String title) {
+        Map<String, Object> properties = MapUtil.map("title", title);
+        long nodeId = inserter.createNode(properties, WikiLabel.Page);
+        inMemoryIndex.put(title, nodeId);
     }
 
     private Long findNodeId(String title) {
