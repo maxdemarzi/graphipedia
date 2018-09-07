@@ -72,7 +72,8 @@ public class ImportGraph {
     }
 
     public void finish() {
-        inserter.createDeferredSchemaIndex(WikiLabel.Page).on("title").create();
+        inserter.createDeferredSchemaIndex(WikiLabel.Thing).on("name").create();
+        inserter.createDeferredSchemaIndex(WikiLabel.Thing).on("lowercase_name").create();
         inserter.shutdown();
     }
 

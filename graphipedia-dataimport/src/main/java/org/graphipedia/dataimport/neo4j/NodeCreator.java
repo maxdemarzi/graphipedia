@@ -21,6 +21,7 @@
 //
 package org.graphipedia.dataimport.neo4j;
 
+import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -54,8 +55,9 @@ public class NodeCreator extends SimpleStaxParser {
     }
 
     private void createNode(String title) {
-        Map<String, Object> properties = MapUtil.map("title", title);
-        long nodeId = inserter.createNode(properties, WikiLabel.Page);
+        Map<String, Object> properties = MapUtil.map("name", title, "lowercase_name", Normalizer.normalize(title, Normalizer.Form.NFD)
+                .replaceAll("[^\\p{ASCII}]", "").toLowerCase());
+        long nodeId = inserter.createNode(properties, WikiLabel.Thing);
         inMemoryIndex.put(title, nodeId);
         pageCounter.increment();
     }
